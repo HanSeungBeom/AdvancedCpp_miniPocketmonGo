@@ -13,9 +13,9 @@ class Monster
 	int hp;			 //몬스터 체력
 	int atk;		 //몬스터 공격력
 	int def;		 //몬스터 방어력
+	int cp;			 //몬스터의 cp
 public:
 	Monster();
 	~Monster();
-	
 };
 
