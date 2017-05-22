@@ -11,6 +11,8 @@ class Ball
 	int probability;	//È®·ü
 public:
 	Ball();
+	Ball(int id, string ballName, int price, int probability);
 	~Ball();
+	int getId();
+	
 };
-
