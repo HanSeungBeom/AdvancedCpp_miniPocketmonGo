@@ -2,8 +2,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-using namespace std;
+#include "BallPocket.h"
 #include "Monster.h"
+using namespace std;
 
 class Player
 {
@@ -13,11 +14,21 @@ class Player
 	int maxMonster; //최대 잡을 수 있는 몬스터의 수
 	int maxBall;	//최대 소유 몬스터볼 수
 	int ballKind;	//가진 볼의 정보수
-	int*ballCount;  //소유한 볼 수
+	vector<BallPocket> ballPocket;  //소유한 볼 
 	int monsterCount; //포획한 몬스터 수
-	vector<Monster> mosters;	//가진 몬스터
+	vector<Monster> monsters;	//가진 몬스터
 public:
-	Player();
+	Player(string name, 
+		int sex, 
+		int money, 
+		int maxMonster, 
+		int maxBall, 
+		int ballKind, 
+		vector<BallPocket> ballPocket, 
+		int monsterCount, 
+		vector<Monster> monsters);
 	~Player();
 };
+
+#pragma once
 
