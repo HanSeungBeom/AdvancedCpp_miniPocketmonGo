@@ -1,13 +1,7 @@
 #include "Monster.h"
 
 
-Monster::Monster(
-	int id,
-	string nickname,
-	int hp, 
-	int attk,
-	int def,
-	int cp)
+Monster::Monster(int id,string nickname, int hp, int attk,int def,int cp)
 	{
 	this->id = id;
 	this->nickname = nickname;
