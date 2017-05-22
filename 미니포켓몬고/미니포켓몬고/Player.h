@@ -28,6 +28,17 @@ public:
 		int monsterCount, 
 		vector<Monster> monsters);
 	~Player();
+	string getName();
+	void setName(string name);
+	int getSex();
+	void setSex(int sex);
+	int getMoney();
+	void setMoney(int money);
+	int getMaxMonster();
+	void setMaxMonster(int maxMonster);
+	int getMaxBall();
+	void setMaxBall(int maxBall);
+	
 };
 
 #pragma once
