@@ -20,3 +20,17 @@ Ball::~Ball()
 int Ball::getId(){
 	return id;
 }
+
+string Ball::getName(){
+	return name;
+}
+
+int Ball::getPrice(){
+	return price;
+}
+
+int Ball::getProbability(){
+	return probability;
+}
+
+

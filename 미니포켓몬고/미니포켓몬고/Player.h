@@ -38,6 +38,8 @@ public:
 	void setMaxMonster(int maxMonster);
 	int getMaxBall();
 	void setMaxBall(int maxBall);
+	int getBallKind();
+	vector<BallPocket>& getBallPocket();
 	
 };
 

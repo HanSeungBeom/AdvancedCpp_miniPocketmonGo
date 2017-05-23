@@ -8,4 +8,9 @@ class BallPocket //볼주머니
 public:
 	BallPocket(Ball ball, int num);
 	~BallPocket();
+	Ball getBall();
+	int getNum();
+	void setNum(int num);
+	void addNum(int num);
+	
 };

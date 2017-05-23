@@ -22,7 +22,7 @@ public:
 	int menu_main();
 	void menuPlayer();
 	//void menuMonster();
-	//void menuBuy();
+	void menuBuy();
 	//void menuGetPoketmon();
 	//void menuExit();
 	

@@ -38,7 +38,7 @@ void MiniPoketmonGo::run(){
 			//menuMonster();
 			break;
 		case 3:
-			//menuBuy();
+			menuBuy();
 			break;
 		case 4:
 			//menuGetPoketmon();
@@ -140,4 +140,56 @@ void MiniPoketmonGo::menuPlayer(){
 		}
 	}
 
+}
+
+void MiniPoketmonGo::menuBuy(){
+	system("cls");
+	cout << "몬스터볼 구입 (소지금 : " << player->getMoney() << "원)" << endl << endl;
+	vector<BallPocket>& ballPocket = player->getBallPocket();
+
+	int playerTotalBallNum = 0;
+	for (int i = 0; i < ballPocket.size(); i++) playerTotalBallNum += ballPocket.at(i).getNum();
+
+	for (int i = 0; i < ballPocket.size()+1; i++){
+		
+		if (i == ballPocket.size()){
+			cout << (i + 1) << ". 메인메뉴로 돌아가기" << endl;
+		}
+		else{
+			BallPocket nowPocket = ballPocket.at(i);
+			cout << (i + 1) << ". " << nowPocket.getBall().getName()
+			<< "(" << nowPocket.getNum() << "개 보유 중) 개당 " << nowPocket.getBall().getPrice() << "원" << endl;
+		}
+	}
+	
+	while (1){
+		int selectedNum; cin >> selectedNum;
+		if (1 <= selectedNum && selectedNum <= ballPocket.size()+1){
+			if (selectedNum == (ballPocket.size()+1) ){
+				return;
+			}
+			while (1){
+				cout << "원하는 구매 수량을 입력하세요 : ";
+				int num; cin >> num;
+				if (player->getMaxBall() < playerTotalBallNum + num){
+					cout << "총 보유 수량을 넘어서게 됩니다." << endl;
+					continue;
+				}
+				else{
+					int price = num * (ballPocket.at(selectedNum - 1).getBall().getPrice());
+					if (player->getMoney() < price){
+						cout << "보유한 금액보다 많은 금액이 필요합니다." << endl;
+					}
+					else{
+						player->setMoney(player->getMoney() - price);
+						ballPocket.at(selectedNum - 1).addNum(num);
+						return;
+					}
+				}
+			}
+		}
+		else{
+			cout << "입력 범위를 벗어났습니다." << endl;
+		}
+	}
 }
