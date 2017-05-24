@@ -1,6 +1,7 @@
 #include "MiniPoketmonGo.h"
 #include "FileManager.h"
 #include "Player.h"
+#include "Menu.h"
 #include <fstream>
 
 MiniPoketmonGo::MiniPoketmonGo()
@@ -15,15 +16,15 @@ MiniPoketmonGo::~MiniPoketmonGo()
 	
 }
 void MiniPoketmonGo::loadData(){
-	monsters = fm->readMonsterFromFile();
+	monstersData = fm->readMonsterFromFile();
 	balls = fm->readMonsterBallFromFile();
-	player = fm->readPlayerFromFile(monsters, balls);
+	player = fm->readPlayerFromFile(monstersData, balls);
 }
 
 
 void MiniPoketmonGo::debug(){
-	for (int i = 0; i < monsters.size(); i++){
-		cout << monsters.at(i).getName() << endl;
+	for (int i = 0; i < monstersData.size(); i++){
+		cout << monstersData.at(i).getName() << endl;
 	}
 }
 
@@ -35,7 +36,7 @@ void MiniPoketmonGo::run(){
 			menuPlayer();
 			break;
 		case 2:
-			//menuMonster();
+			menuMonster();
 			break;
 		case 3:
 			menuBuy();
@@ -150,7 +151,7 @@ void MiniPoketmonGo::menuBuy(){
 	int playerTotalBallNum = 0;
 	for (int i = 0; i < ballPocket.size(); i++) playerTotalBallNum += ballPocket.at(i).getNum();
 
-	for (int i = 0; i < ballPocket.size()+1; i++){
+	for (int i = 0; i < ballPocket.size() + 1; i++){
 		
 		if (i == ballPocket.size()){
 			cout << (i + 1) << ". 메인메뉴로 돌아가기" << endl;
@@ -190,6 +191,69 @@ void MiniPoketmonGo::menuBuy(){
 		}
 		else{
 			cout << "입력 범위를 벗어났습니다." << endl;
+		}
+	}
+}
+
+void MiniPoketmonGo::menuMonster(){
+	
+	vector<Monster>& monsters = player->getMonster();
+	Menu menu("내 몬스터 보기 & 정보 변경");
+	for (int i = 0; i < monsters.size(); i++){
+		menu.addMenu("이름 : " + monsters.at(i).getNickname()
+			+ "(" + getMonsterName(monsters.at(i).getId()) + ")"
+			+ " / CP : " + to_string(monsters.at(i).getCp()));
+	}
+	menu.addMenu("몬스터 방류하기");
+	menu.addMenu("메인 메뉴로 돌아가기");
+	
+	while (1){
+		menu.printMenu();
+		int input = menu.input();
+		if (input == menu.getMenuNum() - 1){//몬스터 방류하기
+			
+			if (monsters.size() == 0){
+				cout << "방류할 몬스터가 없습니다." << endl;
+				cin.ignore(); getchar();
+				return;
+			}
+
+			int num;
+			cout << "방류할 포켓몬의 번호를 입력하세요 : ";
+			while (1){
+				cin >> num;
+				if (0<num && num<=monsters.size()){
+					monsters.erase(monsters.begin() + (num - 1));
+					menu.delMenu(num - 1);
+					break;
+				}
+				else{
+					cout << "입력 범위를 벗어났습니다." << endl;
+				}
+			}
+
+		}
+		else if (input == menu.getMenuNum()){//메인 메뉴로 돌아가기
+			break;
+		}
+		else{//해당 몬스터 클릭하였을 때.
+			string nickname;
+			cout << "변경할 이름을 입력하세요 : ";
+			cin.ignore();
+			getline(cin, nickname);
+			monsters.at(input - 1).setNickname(nickname);
+			menu.setMenu(input - 1, "이름 : " + monsters.at(input-1).getNickname()
+				+ "(" + getMonsterName(monsters.at(input - 1).getId()) + ")"
+				+ " / CP : " + to_string(monsters.at(input - 1).getCp()));
+		}
+	}
+
+}
+
+string MiniPoketmonGo::getMonsterName(int id){
+	for (int i = 0; i < monstersData.size(); i++){
+		if (monstersData.at(i).getId() == id){
+			return monstersData.at(i).getName();
 		}
 	}
 }
