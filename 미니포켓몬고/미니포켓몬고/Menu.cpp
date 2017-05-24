@@ -44,3 +44,7 @@ int Menu::input(){
 	}
 }
 
+void Menu::clearMenu(){
+	menus.clear();
+}
+

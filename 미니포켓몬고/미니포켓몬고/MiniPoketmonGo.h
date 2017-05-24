@@ -8,7 +8,7 @@ class MiniPoketmonGo
 	FileManager* fm;		//파일 관리자
 	Player* player;		//게임 플레이어
 	vector<MonsterData> monstersData;	//몬스터 데이터
-	vector<Ball> balls;		//몬스터볼 데이터
+	vector<Ball> ballsData;		//몬스터볼 데이터
 
 public:
 	MiniPoketmonGo();
@@ -23,10 +23,14 @@ public:
 	void menuPlayer();
 	void menuMonster();
 	void menuBuy();
+	void menuGetPoketmon();
 	string getMonsterName(int id); 
+	string getBallName(int id);
 	//void menuGetPoketmon();
 	//void menuExit();
 	
 	void debug();
+	Monster getRandomMonster();
+
 };
 

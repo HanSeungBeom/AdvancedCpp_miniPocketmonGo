@@ -12,5 +12,5 @@ public:
 	int getNum();
 	void setNum(int num);
 	void addNum(int num);
-	
+	bool throwBall();
 };

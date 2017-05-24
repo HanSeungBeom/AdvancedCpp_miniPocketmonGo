@@ -18,5 +18,6 @@ public:
 	int getMenuNum();
 	void printMenu();
 	int input();
+	void clearMenu();
 };
 

@@ -25,3 +25,10 @@ void BallPocket::setNum(int num){
 void BallPocket::addNum(int num){
 	this->num += num;
 }
+bool BallPocket::throwBall(){
+	this->num--;
+	int randNum = rand() % 100;
+
+	if (0 <= randNum && randNum < ball.getProbability()) return true;
+	else return false;
+}

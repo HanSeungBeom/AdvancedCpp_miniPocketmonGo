@@ -17,8 +17,8 @@ MiniPoketmonGo::~MiniPoketmonGo()
 }
 void MiniPoketmonGo::loadData(){
 	monstersData = fm->readMonsterFromFile();
-	balls = fm->readMonsterBallFromFile();
-	player = fm->readPlayerFromFile(monstersData, balls);
+	ballsData = fm->readMonsterBallFromFile();
+	player = fm->readPlayerFromFile(monstersData, ballsData);
 }
 
 
@@ -42,7 +42,7 @@ void MiniPoketmonGo::run(){
 			menuBuy();
 			break;
 		case 4:
-			//menuGetPoketmon();
+			menuGetPoketmon();
 			break;
 		case 5:
 			//menuExit();
@@ -250,6 +250,114 @@ void MiniPoketmonGo::menuMonster(){
 
 }
 
+void MiniPoketmonGo::menuGetPoketmon(){
+	
+	
+	Monster genMonster = getRandomMonster();
+	string title = "몬스터 잡기\n\n"+  getMonsterName(genMonster.getId()) + "(CP : " + to_string(genMonster.getCp()) + ")";
+	Menu menu(title);
+	bool runaway = false;
+	bool catchPoketmon = false;
+	int selectedPocket = -1;
+	while (!(runaway || catchPoketmon)){
+		menu.clearMenu();
+		vector<BallPocket>& playerPocket = player->getBallPocket();	
+		bool empty = true;
+		if (selectedPocket == -1){ //볼을 직접 선택한 것이 아니라면
+			for (int i = 0; i < playerPocket.size(); i++){
+				if (playerPocket.at(i).getNum() != 0){
+					empty = false;
+					selectedPocket = (i+1);
+					menu.addMenu(playerPocket.at(i)
+						.getBall().getName() + " 던지기(" + to_string((playerPocket.at(i).getNum())) + "개 남음)");
+					break;
+				}
+			}
+		}
+		else{
+			int selectedPocketNum = playerPocket.at(selectedPocket - 1).getNum();
+			if (selectedPocketNum!= -1){ //선택한 볼이 있으면
+				if (playerPocket.at(selectedPocket - 1).getNum() != 0){
+					menu.addMenu(playerPocket.at(selectedPocket - 1)
+					.getBall().getName() + " 던지기(" + to_string((playerPocket.at(selectedPocket - 1).getNum())) + "개 남음)");
+					empty = false;
+				}
+				else{
+					empty = true;
+				}
+			}
+			else{
+				empty = true;
+			}
+		}
+
+		if (empty){
+			menu.addMenu("포켓몬 볼 던지기(포켓볼이 없습니다.)");
+		}
+		menu.addMenu("몬스터 볼 변경");
+		menu.addMenu("도망가기");
+		menu.printMenu();
+		
+		int input = menu.input();
+		switch (input){
+		case 1:{//포켓몬 볼 던지기
+				   if (empty){
+					   cout << "포켓볼이 없습니다. 다른 메뉴를 선택해주세요" << endl;
+					   cin.ignore();
+					   getchar();
+				   }
+				   else{
+					   BallPocket& nowBallPocket = playerPocket.at(selectedPocket - 1);
+					   if (nowBallPocket.throwBall()){//잡았을 때
+						   vector<Monster>& playerMonster = player->getMonster();
+						   playerMonster.push_back(genMonster);
+						   cout << "잡았습니다. (엔터 입력시 메인 메뉴로 돌아갑니다.)" << endl;
+						   cin.ignore(); getchar();
+						   catchPoketmon = true;
+				
+					   }
+					   else{
+						   cout << "튀어나왔습니다." << endl;
+						   cin.ignore();
+						   getchar();
+					   }
+
+				   }
+		}
+			break;
+		case 2:{//몬스터 볼 변경
+				   Menu selBallMenu("몬스터 볼 변경");
+
+				   for (int i = 0; i < playerPocket.size(); i++){
+					   selBallMenu.addMenu(playerPocket.at(i).getBall().getName() + "(" + to_string(playerPocket.at(i).getNum()) + "개 남음)");
+				   }
+				   selBallMenu.printMenu();
+				   selectedPocket = selBallMenu.input();
+		}
+			break;
+		case 3:{//도망가기
+				   runaway = true;
+		}
+			break;
+		}
+
+	}
+}
+
+Monster MiniPoketmonGo::getRandomMonster(){
+	int totalProbability = 0;
+	for (int i = 0; i < monstersData.size(); i++){
+		totalProbability += monstersData.at(i).getProbability();
+	}
+	int randNum = rand() % totalProbability;
+	int index = 0;
+	while (randNum >= monstersData.at(index).getProbability()){
+		randNum -= monstersData.at(index).getProbability();
+		index++;
+	}
+	return monstersData.at(index).genMonster();
+}
+
 string MiniPoketmonGo::getMonsterName(int id){
 	for (int i = 0; i < monstersData.size(); i++){
 		if (monstersData.at(i).getId() == id){
@@ -257,3 +365,11 @@ string MiniPoketmonGo::getMonsterName(int id){
 		}
 	}
 }
+string MiniPoketmonGo::getBallName(int id){
+	for (int i = 0; i < ballsData.size(); i++){
+		if (ballsData.at(i).getId() == id){
+			return ballsData.at(i).getName();
+		}
+	}
+}
+
