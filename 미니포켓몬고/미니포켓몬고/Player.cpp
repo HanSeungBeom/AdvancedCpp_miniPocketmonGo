@@ -39,3 +39,4 @@ int Player::getMaxBall(){ return maxBall; }
 void Player::setMaxBall(int maxBall){ this->maxBall = maxBall; }
 int Player::getBallKind(){ return ballKind; }
 vector<BallPocket>& Player::getBallPocket(){ return ballPocket; }
+vector<Monster>& Player::getMonster(){ return monsters; }

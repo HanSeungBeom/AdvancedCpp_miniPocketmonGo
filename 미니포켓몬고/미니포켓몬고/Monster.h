@@ -19,5 +19,9 @@ public:
 		int def,
 		int cp);
 	~Monster();
+	string getNickname();
+	void setNickname(string nickname);
+	int getCp();
+	int getId();
 };
 

@@ -14,3 +14,21 @@ Monster::Monster(int id,string nickname, int hp, int attk,int def,int cp)
 Monster::~Monster()
 {
 }
+
+string Monster::getNickname(){
+	return nickname;
+}
+
+void Monster::setNickname(string nickname){
+	this->nickname = nickname;
+}
+
+int Monster::getCp(){
+	return cp;
+}
+
+int Monster::getId(){
+	return id;
+}
+
+
