@@ -9,6 +9,7 @@ class MiniPoketmonGo
 	Player* player;		//게임 플레이어
 	vector<MonsterData> monstersData;	//몬스터 데이터
 	vector<Ball> ballsData;		//몬스터볼 데이터
+	bool loadSuccess;
 
 public:
 	MiniPoketmonGo();

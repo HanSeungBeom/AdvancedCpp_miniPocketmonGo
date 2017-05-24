@@ -13,11 +13,12 @@ MiniPoketmonGo::MiniPoketmonGo()
 
 MiniPoketmonGo::~MiniPoketmonGo()
 {
-	
+	delete fm;
+	delete player;
 }
 void MiniPoketmonGo::loadData(){
-	monstersData = fm->readMonsterFromFile();
-	ballsData = fm->readMonsterBallFromFile();
+	monstersData = fm->readMonsterFromFile(loadSuccess);
+	ballsData = fm->readMonsterBallFromFile(loadSuccess);
 	player = fm->readPlayerFromFile(monstersData, ballsData);
 }
 
@@ -29,6 +30,13 @@ void MiniPoketmonGo::debug(){
 }
 
 void MiniPoketmonGo::run(){
+	if (!loadSuccess){
+		cout << "데이터를 가져오는데 실패하여 프로그램이 종료됩니다." << endl;
+		cin.ignore();
+		getchar();
+		return;
+	}
+
 	bool out = false;
 	while (!out){
 		switch (menu_main()){
@@ -50,6 +58,7 @@ void MiniPoketmonGo::run(){
 			break;
 		}
 	}
+
 }
 int MiniPoketmonGo::menu_main(){
 	int selectedNum;

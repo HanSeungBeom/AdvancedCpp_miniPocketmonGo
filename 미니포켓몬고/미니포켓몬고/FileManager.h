@@ -22,8 +22,8 @@ public:
 	string getPoketmonFile();
 	string getMonsterballFile();
 
-	vector<Ball> readMonsterBallFromFile();
-	vector<MonsterData> readMonsterFromFile();
+	vector<Ball> readMonsterBallFromFile(bool& loadSuccess);
+	vector<MonsterData> readMonsterFromFile(bool& loadSuccess);
 	Player* readPlayerFromFile(vector<MonsterData> monsterDatas, vector<Ball> balls);
 	void writePlayerToFile(Player* player);
 	
