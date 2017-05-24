@@ -23,5 +23,8 @@ public:
 	void setNickname(string nickname);
 	int getCp();
 	int getId();
+	int getHp();
+	int getAttk();
+	int getDef();
 };
 

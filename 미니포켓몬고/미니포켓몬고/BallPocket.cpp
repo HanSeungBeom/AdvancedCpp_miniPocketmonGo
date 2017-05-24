@@ -2,9 +2,10 @@
 #include "Ball.h"
 
 
-BallPocket::BallPocket(Ball ball,int num)
+BallPocket::BallPocket(Ball ball,int id,int num)
 {
 	this->ball = ball;
+	this->id = id;
 	this->num = num;
 }
 
@@ -12,8 +13,8 @@ BallPocket::~BallPocket()
 {
 }
 
-Ball BallPocket::getBall(){
-	return ball;
+int BallPocket::getId(){
+	return id;
 }
 int BallPocket::getNum(){
 	return num;

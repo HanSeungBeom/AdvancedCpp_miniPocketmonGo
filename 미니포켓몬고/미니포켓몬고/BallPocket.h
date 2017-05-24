@@ -3,12 +3,13 @@
 
 class BallPocket //볼주머니
 {
-	Ball ball;     //볼 주머니에 넣어져있는 볼 종류
-	int num;       //들어있는 수
+	Ball ball;
+	int id;     //볼 주머니에 넣어져있는 볼 종류
+	int num;     //들어있는 수
 public:
-	BallPocket(Ball ball, int num);
+	BallPocket(Ball ball,int id, int num);
 	~BallPocket();
-	Ball getBall();
+	int getId();
 	int getNum();
 	void setNum(int num);
 	void addNum(int num);

@@ -26,11 +26,12 @@ public:
 	void menuGetPoketmon();
 	string getMonsterName(int id); 
 	string getBallName(int id);
-	//void menuGetPoketmon();
-	//void menuExit();
+	int getBallprice(int id);
+	void menuExitandSave();
 	
 	void debug();
 	Monster getRandomMonster();
+	
 
 };
 

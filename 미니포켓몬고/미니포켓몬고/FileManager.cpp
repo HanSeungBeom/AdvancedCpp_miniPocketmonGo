@@ -17,8 +17,6 @@ FileManager::~FileManager()
 }
 
 vector<Ball> FileManager::readMonsterBallFromFile(){
-	string mosterballFile = "MonsterBall.txt";
-
 	vector<Ball> balls;
 	int n, id, price, probability;
 	string name;
@@ -36,9 +34,36 @@ vector<Ball> FileManager::readMonsterBallFromFile(){
 	}
 	return balls;
 }
-vector<MonsterData> FileManager::readMonsterFromFile(){
-	string poketmonFile = "Poketmon.txt";
+void FileManager::writePlayerToFile(Player* player){
+	ofstream fout(playerFile);
+	fout << player->getName() << endl;
+	fout << player->getSex() << endl;
+	fout << player->getMoney() << endl;
+	fout << player->getMaxMonster() << endl;
+	fout << player->getMaxBall() << endl;
+	fout << player->getBallPocket().size() << endl;
+	for (int i = 0; i < player->getBallPocket().size(); i++){
+		fout << player->getBallPocket().at(i).getId()
+			<< ' '
+			<< player->getBallPocket().at(i).getNum()
+			<< endl;
+	}
+	fout << player->getMonster().size() << endl;
+	for (int i = 0; i < player->getMonster().size(); i++){
+		fout << player->getMonster().at(i).getId() << endl;
+		fout << player->getMonster().at(i).getNickname()<< endl;
+		fout << player->getMonster().at(i).getHp() << endl;
+		fout << player->getMonster().at(i).getAttk() << endl;
+		fout << player->getMonster().at(i).getDef() << endl;
+	}
 
+	if (fout.is_open() == true){
+		fout.close();
+	}
+}
+
+
+vector<MonsterData> FileManager::readMonsterFromFile(){
 	vector<MonsterData> monsterDatas;
 	int n, id, type, probability;
 	string name;
@@ -57,8 +82,6 @@ vector<MonsterData> FileManager::readMonsterFromFile(){
 	return monsterDatas;
 }
 Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector<Ball> balls){
-	string playerFile = "Player.txt";
-
 	string name;
 	int sex, money, maxMonster, maxBall, ballKind;
 	vector<BallPocket> ballPocket;
@@ -75,18 +98,15 @@ Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector
 	fin >> ballKind;
 	for (int i = 0; i < ballKind; i++){
 		int ballId; fin >> ballId;
-
-		///balls 백터에서 주어진 id에 해당하는 값을 구한다.
-		int ballsVectorIndex = -1;
+		int ballNum; fin >> ballNum;
+		Ball ball;
 		for (int j = 0; j < balls.size(); j++){
 			if (balls.at(j).getId() == ballId){
-				ballsVectorIndex = j;
+				ball = balls.at(j);
 				break;
 			}
 		}
-
-		int ballNum; fin >> ballNum;
-		BallPocket newballPocket(balls.at(ballsVectorIndex), ballNum);
+		BallPocket newballPocket(ball,ballId, ballNum);
 		ballPocket.push_back(newballPocket);
 	}
 	

@@ -45,7 +45,7 @@ void MiniPoketmonGo::run(){
 			menuGetPoketmon();
 			break;
 		case 5:
-			//menuExit();
+			menuExitandSave();
 			out = true;
 			break;
 		}
@@ -158,8 +158,8 @@ void MiniPoketmonGo::menuBuy(){
 		}
 		else{
 			BallPocket nowPocket = ballPocket.at(i);
-			cout << (i + 1) << ". " << nowPocket.getBall().getName()
-			<< "(" << nowPocket.getNum() << "개 보유 중) 개당 " << nowPocket.getBall().getPrice() << "원" << endl;
+			cout << (i + 1) << ". " << getBallName(nowPocket.getId())
+			<< "(" << nowPocket.getNum() << "개 보유 중) 개당 " << getBallprice(nowPocket.getId()) << "원" << endl;
 		}
 	}
 	
@@ -177,7 +177,7 @@ void MiniPoketmonGo::menuBuy(){
 					continue;
 				}
 				else{
-					int price = num * (ballPocket.at(selectedNum - 1).getBall().getPrice());
+					int price = num * getBallprice(ballPocket.at(selectedNum - 1).getId());
 					if (player->getMoney() < price){
 						cout << "보유한 금액보다 많은 금액이 필요합니다." << endl;
 					}
@@ -268,8 +268,8 @@ void MiniPoketmonGo::menuGetPoketmon(){
 				if (playerPocket.at(i).getNum() != 0){
 					empty = false;
 					selectedPocket = (i+1);
-					menu.addMenu(playerPocket.at(i)
-						.getBall().getName() + " 던지기(" + to_string((playerPocket.at(i).getNum())) + "개 남음)");
+					menu.addMenu(getBallName(playerPocket.at(i)
+						.getId()) + " 던지기(" + to_string((playerPocket.at(i).getNum())) + "개 남음)");
 					break;
 				}
 			}
@@ -278,8 +278,8 @@ void MiniPoketmonGo::menuGetPoketmon(){
 			int selectedPocketNum = playerPocket.at(selectedPocket - 1).getNum();
 			if (selectedPocketNum!= -1){ //선택한 볼이 있으면
 				if (playerPocket.at(selectedPocket - 1).getNum() != 0){
-					menu.addMenu(playerPocket.at(selectedPocket - 1)
-					.getBall().getName() + " 던지기(" + to_string((playerPocket.at(selectedPocket - 1).getNum())) + "개 남음)");
+					menu.addMenu(getBallName(playerPocket.at(selectedPocket - 1)
+					.getId()) + " 던지기(" + to_string((playerPocket.at(selectedPocket - 1).getNum())) + "개 남음)");
 					empty = false;
 				}
 				else{
@@ -329,7 +329,7 @@ void MiniPoketmonGo::menuGetPoketmon(){
 				   Menu selBallMenu("몬스터 볼 변경");
 
 				   for (int i = 0; i < playerPocket.size(); i++){
-					   selBallMenu.addMenu(playerPocket.at(i).getBall().getName() + "(" + to_string(playerPocket.at(i).getNum()) + "개 남음)");
+					   selBallMenu.addMenu(getBallName(playerPocket.at(i).getId()) + "(" + to_string(playerPocket.at(i).getNum()) + "개 남음)");
 				   }
 				   selBallMenu.printMenu();
 				   selectedPocket = selBallMenu.input();
@@ -342,6 +342,10 @@ void MiniPoketmonGo::menuGetPoketmon(){
 		}
 
 	}
+}
+
+void MiniPoketmonGo::menuExitandSave(){
+	fm->writePlayerToFile(player);
 }
 
 Monster MiniPoketmonGo::getRandomMonster(){
@@ -365,6 +369,7 @@ string MiniPoketmonGo::getMonsterName(int id){
 		}
 	}
 }
+
 string MiniPoketmonGo::getBallName(int id){
 	for (int i = 0; i < ballsData.size(); i++){
 		if (ballsData.at(i).getId() == id){
@@ -373,3 +378,10 @@ string MiniPoketmonGo::getBallName(int id){
 	}
 }
 
+int MiniPoketmonGo::getBallprice(int id){
+	for (int i = 0; i < ballsData.size(); i++){
+		if (ballsData.at(i).getId() == id){
+			return ballsData.at(i).getPrice();
+		}
+	}
+}

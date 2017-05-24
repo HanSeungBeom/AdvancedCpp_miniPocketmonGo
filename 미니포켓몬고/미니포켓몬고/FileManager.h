@@ -25,4 +25,6 @@ public:
 	vector<Ball> readMonsterBallFromFile();
 	vector<MonsterData> readMonsterFromFile();
 	Player* readPlayerFromFile(vector<MonsterData> monsterDatas, vector<Ball> balls);
+	void writePlayerToFile(Player* player);
+	
 };
