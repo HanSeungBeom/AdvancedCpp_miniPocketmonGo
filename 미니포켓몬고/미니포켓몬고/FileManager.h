@@ -5,7 +5,7 @@
 #include <fstream>
 #include "Player.h"
 #include "MonsterData.h"
-#include "Ball.h"
+#include "BallData.h"
 using namespace std;
 
 class FileManager
@@ -22,9 +22,9 @@ public:
 	string getPoketmonFile();
 	string getMonsterballFile();
 
-	vector<Ball> readMonsterBallFromFile(bool& loadSuccess);
+	vector<BallData> readMonsterBallFromFile(bool& loadSuccess);
 	vector<MonsterData> readMonsterFromFile(bool& loadSuccess);
-	Player* readPlayerFromFile(vector<MonsterData> monsterDatas, vector<Ball> balls);
+	Player* readPlayerFromFile(vector<MonsterData> monsterData, vector<BallData> ballsData);
 	void writePlayerToFile(Player* player);
 	
 };

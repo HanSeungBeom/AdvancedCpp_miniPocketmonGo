@@ -3,16 +3,16 @@
 #include <string>
 using namespace std;
 
-class Ball
+class BallData
 {
 	int id;				//볼번호
 	string name;		//볼이름
 	int price;			//볼가격
 	int probability;	//확률
 public:
-	Ball();
-	Ball(int id, string ballName, int price, int probability);
-	~Ball();
+	BallData();
+	BallData(int id, string ballName, int price, int probability);
+	~BallData();
 	int getId();
 	string getName();
 	int getPrice();

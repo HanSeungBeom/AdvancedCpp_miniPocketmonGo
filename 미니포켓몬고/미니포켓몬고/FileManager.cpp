@@ -3,7 +3,7 @@
 #include "MonsterData.h"
 #include "BallPocket.h"
 #include "Monster.h"
-#include "Ball.h"
+#include "BallData.h"
 
 FileManager::FileManager()
 {
@@ -16,8 +16,8 @@ FileManager::~FileManager()
 {
 }
 
-vector<Ball> FileManager::readMonsterBallFromFile(bool& loadSuccess){
-	vector<Ball> balls;
+vector<BallData> FileManager::readMonsterBallFromFile(bool& loadSuccess){
+	vector<BallData> ballsData;
 	int n, id, price, probability;
 	string name;
 	ifstream fin(mosterballFile);
@@ -31,8 +31,8 @@ vector<Ball> FileManager::readMonsterBallFromFile(bool& loadSuccess){
 			getline(fin, name);
 			fin >> price;
 			fin >> probability;
-			Ball newBall(id, name, price, probability);
-			balls.push_back(newBall);
+			BallData newBall(id, name, price, probability);
+			ballsData.push_back(newBall);
 		}
 		loadSuccess = true;
 	}
@@ -40,7 +40,7 @@ vector<Ball> FileManager::readMonsterBallFromFile(bool& loadSuccess){
 		cout << "포켓몬 볼 정보를 가져오는데 실패하였습니다." << endl;
 		loadSuccess = false;
 	}
-	return balls;
+	return ballsData;
 }
 vector<MonsterData> FileManager::readMonsterFromFile(bool& loadSuccess){
 	vector<MonsterData> monsterDatas;
@@ -68,7 +68,7 @@ vector<MonsterData> FileManager::readMonsterFromFile(bool& loadSuccess){
 	}
 	return monsterDatas;
 }
-Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector<Ball> balls){
+Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector<BallData> balls){
 	string name;
 	int sex, money, maxMonster, maxBall, ballKind;
 	vector<BallPocket> ballPocket;
@@ -85,14 +85,14 @@ Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector
 		for (int i = 0; i < ballKind; i++){
 			int ballId; fin >> ballId;
 			int ballNum; fin >> ballNum;
-			Ball ball;
+			BallData ballData;
 			for (int j = 0; j < balls.size(); j++){
 				if (balls.at(j).getId() == ballId){
-					ball = balls.at(j);
+					ballData = balls.at(j);
 					break;
 				}
 			}
-			BallPocket newballPocket(ball, ballId, ballNum);
+			BallPocket newballPocket(ballData, ballId, ballNum);
 			ballPocket.push_back(newballPocket);
 		}
 

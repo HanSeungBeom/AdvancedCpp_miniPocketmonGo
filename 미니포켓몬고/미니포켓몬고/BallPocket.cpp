@@ -1,8 +1,8 @@
 #include "BallPocket.h"
-#include "Ball.h"
+#include "BallData.h"
 
 
-BallPocket::BallPocket(Ball ball,int id,int num)
+BallPocket::BallPocket(BallData ball, int id, int num)
 {
 	this->ball = ball;
 	this->id = id;

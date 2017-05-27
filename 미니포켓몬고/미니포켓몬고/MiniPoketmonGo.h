@@ -1,6 +1,6 @@
 #pragma once
 #include "MonsterData.h"
-#include "Ball.h"
+#include "BallData.h"
 #include "FileManager.h"
 
 class MiniPoketmonGo
@@ -8,7 +8,7 @@ class MiniPoketmonGo
 	FileManager* fm;		//파일 관리자
 	Player* player;		//게임 플레이어
 	vector<MonsterData> monstersData;	//몬스터 데이터
-	vector<Ball> ballsData;		//몬스터볼 데이터
+	vector<BallData> ballsData;		//몬스터볼 데이터
 	bool loadSuccess;
 
 public:
