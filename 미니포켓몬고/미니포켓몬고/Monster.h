@@ -12,15 +12,15 @@ class Monster
 	int def;		 //몬스터 방어력
 	int cp;			 //몬스터의 cp
 public:
-	Monster(int id,
-		string nickname,
-		int hp,
-		int attk,
-		int def,
-		int cp);
+	Monster(int id,string nickname,
+		int hp,int attk,int def,int cp);
 	~Monster();
-	string getNickname();
+	
+	//setter
 	void setNickname(string nickname);
+
+	//getter
+	string getNickname();
 	int getCp();
 	int getId();
 	int getHp();

@@ -10,23 +10,16 @@ MiniPoketmonGo::MiniPoketmonGo()
 	loadData();
 }
 
-
 MiniPoketmonGo::~MiniPoketmonGo()
 {
 	delete fm;
 	delete player;
 }
+
 void MiniPoketmonGo::loadData(){
 	monstersData = fm->readMonsterFromFile(loadSuccess);
 	ballsData = fm->readMonsterBallFromFile(loadSuccess);
 	player = fm->readPlayerFromFile(monstersData, ballsData);
-}
-
-
-void MiniPoketmonGo::debug(){
-	for (int i = 0; i < monstersData.size(); i++){
-		cout << monstersData.at(i).getName() << endl;
-	}
 }
 
 void MiniPoketmonGo::run(){
@@ -60,6 +53,7 @@ void MiniPoketmonGo::run(){
 	}
 
 }
+
 int MiniPoketmonGo::menu_main(){
 	int selectedNum;
 	bool isError = false;
@@ -192,7 +186,7 @@ void MiniPoketmonGo::menuBuy(){
 					}
 					else{
 						player->setMoney(player->getMoney() - price);
-						ballPocket.at(selectedNum - 1).addNum(num);
+						ballPocket.at(selectedNum - 1).setNum( ballPocket.at(selectedNum-1).getNum() + num);
 						return;
 					}
 				}
@@ -260,46 +254,53 @@ void MiniPoketmonGo::menuMonster(){
 }
 
 void MiniPoketmonGo::menuGetPoketmon(){
-	
-	
 	Monster genMonster = getRandomMonster();
 	string title = "몬스터 잡기\n\n"+  getMonsterName(genMonster.getId()) + "(CP : " + to_string(genMonster.getCp()) + ")";
 	Menu menu(title);
 	bool runaway = false;
 	bool catchPoketmon = false;
 	int selectedPocket = -1;
-	while (!(runaway || catchPoketmon)){
+
+
+	while (!(runaway || catchPoketmon)){ //도망치거나, 몬스터를 잡으면 종료
+	
+		//값 초기화
 		menu.clearMenu();
-		vector<BallPocket>& playerPocket = player->getBallPocket();	
 		bool empty = true;
-		if (selectedPocket == -1){ //볼을 직접 선택한 것이 아니라면
+
+		//플레이어의 볼 포켓 정보를 가져온다.
+		vector<BallPocket>& playerPocket = player->getBallPocket();	
+
+
+		//볼을 선택하지 않았을 때(처음 메뉴에 들어왔을 때)
+		if (selectedPocket == -1){ 
+
+			//가장 id가 빠른 순 부터 조사하여 공이 있으면 메뉴에 등록한다.
 			for (int i = 0; i < playerPocket.size(); i++){
 				if (playerPocket.at(i).getNum() != 0){
-					empty = false;
-					selectedPocket = (i+1);
+					empty = false; //공을 있으니 empty를 false로 하고
+					selectedPocket = (i+1); //선택된 볼 포켓 번호를 저장한다.
 					menu.addMenu(getBallName(playerPocket.at(i)
 						.getId()) + " 던지기(" + to_string((playerPocket.at(i).getNum())) + "개 남음)");
 					break;
 				}
 			}
 		}
+		//볼을 선택한 경우 (볼 변경으로 볼을 변경한 이후)
 		else{
-			int selectedPocketNum = playerPocket.at(selectedPocket - 1).getNum();
-			if (selectedPocketNum!= -1){ //선택한 볼이 있으면
-				if (playerPocket.at(selectedPocket - 1).getNum() != 0){
-					menu.addMenu(getBallName(playerPocket.at(selectedPocket - 1)
-					.getId()) + " 던지기(" + to_string((playerPocket.at(selectedPocket - 1).getNum())) + "개 남음)");
-					empty = false;
-				}
-				else{
-					empty = true;
-				}
+			//공이 있을 경우 메뉴에 추가
+			if (playerPocket.at(selectedPocket - 1).getNum() != 0){
+				empty = false;
+				menu.addMenu(getBallName(playerPocket.at(selectedPocket - 1)
+				.getId()) + " 던지기(" + to_string((playerPocket.at(selectedPocket - 1).getNum())) + "개 남음)");
 			}
+			//없을 경우 empty = true
 			else{
 				empty = true;
 			}
 		}
 
+		//화면출력 부분
 		if (empty){
 			menu.addMenu("포켓몬 볼 던지기(포켓볼이 없습니다.)");
 		}
@@ -307,24 +308,35 @@ void MiniPoketmonGo::menuGetPoketmon(){
 		menu.addMenu("도망가기");
 		menu.printMenu();
 		
+		//메뉴 선택 부분
 		int input = menu.input();
 		switch (input){
 		case 1:{//포켓몬 볼 던지기
+
+				   //공이 없으면
 				   if (empty){
 					   cout << "포켓볼이 없습니다. 다른 메뉴를 선택해주세요" << endl;
 					   cin.ignore();
 					   getchar();
 				   }
+				   //공이 있으면
 				   else{
+					   //현재 선택된 볼 포켓 정보를 가져온다.
 					   BallPocket& nowBallPocket = playerPocket.at(selectedPocket - 1);
-					   if (nowBallPocket.throwBall()){//잡았을 때
+					   
+					   //잡았을 때
+					   if (nowBallPocket.throwBall()){
+						   //플레이어의 몬스터 리스트를 가져온다.
 						   vector<Monster>& playerMonster = player->getMonster();
+
+						   //생성된 몬스터를 리스트에 넣는다.
 						   playerMonster.push_back(genMonster);
 						   cout << "잡았습니다. (엔터 입력시 메인 메뉴로 돌아갑니다.)" << endl;
 						   cin.ignore(); getchar();
 						   catchPoketmon = true;
 				
 					   }
+					   //놓쳤을 때
 					   else{
 						   cout << "튀어나왔습니다." << endl;
 						   cin.ignore();
@@ -341,7 +353,7 @@ void MiniPoketmonGo::menuGetPoketmon(){
 					   selBallMenu.addMenu(getBallName(playerPocket.at(i).getId()) + "(" + to_string(playerPocket.at(i).getNum()) + "개 남음)");
 				   }
 				   selBallMenu.printMenu();
-				   selectedPocket = selBallMenu.input();
+				   selectedPocket = selBallMenu.input();//선택한 번호를 저장한다.
 		}
 			break;
 		case 3:{//도망가기
@@ -354,24 +366,47 @@ void MiniPoketmonGo::menuGetPoketmon(){
 }
 
 void MiniPoketmonGo::menuExitandSave(){
+	//파일매니저를 통해 현재의 player객체를 Player.txt에 저장한다.
 	fm->writePlayerToFile(player);
 }
 
 Monster MiniPoketmonGo::getRandomMonster(){
 	int totalProbability = 0;
+	
+	//각 몬스터들이 나올 확률을 전체를 다 더한다.
 	for (int i = 0; i < monstersData.size(); i++){
 		totalProbability += monstersData.at(i).getProbability();
 	}
+
+	//랜덤 수를 전체중에 뽑는다.
 	int randNum = rand() % totalProbability;
+	
+	//A확률이 20, B확률이 10, C확률이 5라면
+	//totalProbability = 35 이면
+	// A포켓몬확률(0~19), B포켓몬 확률(20~29), C포켓몬(30~34)로 생각을 하였다.
+	// 그래서 아래는 randNum이 저 중에 어디에 속하는지를 따지는 알고리즘이다.
+	
+	
 	int index = 0;
 	while (randNum >= monstersData.at(index).getProbability()){
 		randNum -= monstersData.at(index).getProbability();
 		index++;
 	}
+	/*
+	예를 들면 위의 상황에서 randNum 이 22가 나왔다면
+	randNum (22) 은 첫번째 몬스터의 가능성 20 보다 크므로
+	randNum에서 첫번째 몬스터의 가능성을 뺀값을 저장한다.
+	그리고 index를 다음칸으로 옮긴다.
+
+	그러면 randNum(2) 는 둡너째 몬스터의 가능성 10보다 작으므로 while문을 빠져나오고
+	두번째 몬스터의 데이터를 가지고 몬스터를 만들어서 return 한다.
+	*/
+
 	return monstersData.at(index).genMonster();
 }
 
 string MiniPoketmonGo::getMonsterName(int id){
+	//id에 해당하는 몬스터 이름을 return한다.
 	for (int i = 0; i < monstersData.size(); i++){
 		if (monstersData.at(i).getId() == id){
 			return monstersData.at(i).getName();
@@ -380,6 +415,7 @@ string MiniPoketmonGo::getMonsterName(int id){
 }
 
 string MiniPoketmonGo::getBallName(int id){
+	//id에 해당하는 볼이름을 return한다.
 	for (int i = 0; i < ballsData.size(); i++){
 		if (ballsData.at(i).getId() == id){
 			return ballsData.at(i).getName();
@@ -388,6 +424,7 @@ string MiniPoketmonGo::getBallName(int id){
 }
 
 int MiniPoketmonGo::getBallprice(int id){
+	//id에 해당하는 볼가격을 return한다.
 	for (int i = 0; i < ballsData.size(); i++){
 		if (ballsData.at(i).getId() == id){
 			return ballsData.at(i).getPrice();

@@ -12,7 +12,6 @@ BallData::BallData(int id, string name, int price, int probability)
 	this->probability = probability;
 }
 
-
 BallData::~BallData()
 {
 }

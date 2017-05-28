@@ -13,9 +13,10 @@ public:
 	BallData();
 	BallData(int id, string ballName, int price, int probability);
 	~BallData();
+
+	//getter
 	int getId();
 	string getName();
 	int getPrice();
 	int getProbability();
-	
 };

@@ -7,6 +7,7 @@
 
 FileManager::FileManager()
 {
+	//파일명을 설정해준다. 이후에 파일이 바뀌면 이곳에서 수정하면 된다.
 	mosterballFile = "MonsterBall.txt";
 	poketmonFile = "Poketmon.txt";
 	playerFile = "Player.txt";
@@ -17,6 +18,7 @@ FileManager::~FileManager()
 }
 
 vector<BallData> FileManager::readMonsterBallFromFile(bool& loadSuccess){
+	//MonsterBall.txt에서 데이터를 읽어와 vector<BallData> 를 반환한다.
 	vector<BallData> ballsData;
 	int n, id, price, probability;
 	string name;
@@ -43,6 +45,8 @@ vector<BallData> FileManager::readMonsterBallFromFile(bool& loadSuccess){
 	return ballsData;
 }
 vector<MonsterData> FileManager::readMonsterFromFile(bool& loadSuccess){
+	//Poketmon.txt파일을 읽어와 vector<MonsterData>를 반환한다.
+
 	vector<MonsterData> monsterDatas;
 	int n, id, type, probability;
 	string name;
@@ -69,6 +73,8 @@ vector<MonsterData> FileManager::readMonsterFromFile(bool& loadSuccess){
 	return monsterDatas;
 }
 Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector<BallData> balls){
+	//Player.txt파일을 읽어와 Player 객체를 반환한다.
+
 	string name;
 	int sex, money, maxMonster, maxBall, ballKind;
 	vector<BallPocket> ballPocket;
@@ -144,6 +150,8 @@ Player* FileManager::readPlayerFromFile(vector<MonsterData> monsterDatas, vector
 	return player;
 }
 void FileManager::writePlayerToFile(Player* player){
+	//인자로 들어온 player 객체를 Player.txt에 저장한다.
+
 	ofstream fout(playerFile);
 	fout << player->getName() << endl;
 	fout << player->getSex() << endl;

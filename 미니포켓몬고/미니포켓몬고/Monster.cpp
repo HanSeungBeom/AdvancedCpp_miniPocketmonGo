@@ -34,9 +34,11 @@ int Monster::getId(){
 int Monster::getHp(){
 	return hp;
 }
+
 int Monster::getAttk(){
 	return attk;
 }
+
 int Monster::getDef(){
 	return def;
 }
